@@ -2,19 +2,18 @@ CXX=g++
 #CXXFLAGS=-g -O2 -fopenmp -D_PRINT_WARNINGS
 CXXFLAGS=-g -O2 -fopenmp
 
-BLITZDIR=/user/blitz/0.9
-BLITZINC=-I$(BLITZDIR)/include
-BLITZLIB=-L$(BLITZDIR)/lib -lblitz
+BLITZINC=`pkg-config --cflags blitz`
+BLITZLIB=`pkg-config --libs blitz`
 
-BLASDIR=/opt/intel/mkl/10.2.4.032
+BLASDIR=
 BLASINC=-I$(BLASDIR)/include
-BLASLIB=-lmkl_intel_lp64 -lmkl_sequential -lmkl_core
+BLASLIB=-L/usr/lib/atlas-base/ -lcblas -llapack
 
-BOOSTDIR=/user/boost/1.52.0
-BOOSTINC=-I$(BOOSTDIR)/include
-BOOSTLIB=-L$(BOOSTDIR)/lib -lboost_serialization
+BOOSTDIR=
+BOOSTINC=
+BOOSTLIB=-lboost_serialization
 
-BTASDIR=/user/btas-0.2.4
+BTASDIR=..
 BTASINC=-I$(BTASDIR)/include
 BTASLIB=  $(BTASDIR)/lib
 
@@ -31,7 +30,7 @@ OBJ_SAMPLE = $(SRC_SAMPLE:.C=.o)
 all	: dmrg.x
 
 dmrg.x	: $(OBJ_SAMPLE)
-	$(CXX) $(CXXFLAGS) $(LIBRARYFLAGS) -o dmrg.x $(OBJ_SAMPLE) $(BTASLIB)/libbtas.a
+	$(CXX) $(CXXFLAGS) -o dmrg.x $(OBJ_SAMPLE) $(BTASLIB)/libbtas.a $(LIBRARYFLAGS)
 
 clean	:
-	rm *.o; rm *.x; rm *.a;
+	rm *.o *.x *.a;
